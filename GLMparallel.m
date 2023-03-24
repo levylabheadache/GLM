@@ -40,7 +40,7 @@ else
     fprintf('\nStarting parfor loop - %i scans, %i predictors,  %i response variables', size(Pred.TB, 1), size(Pred.TB, 2)  , Resp.N ); 
     fix(clock)
     tic 
-    parfor r = 1:Resp.N % 
+    parfor r = 1:Resp.N % if error here, change parfor to for so you can have more detail of where the error happened
         %fprintf('\nr = %i', r);
         Result(r).lopo = struct('const',nan(1,Pred.N), 'coeff',nan(Opts.Nshift,Pred.N,Pred.N), 'obj',[], 'prediction',nan(Nfull,Pred.N), 'dev',nan(1,Pred.N), 'devFrac',nan(1,Pred.N) );
         Result(r).lofo = struct('const',nan(1,Pred.fam.N), 'coeff',nan(Opts.Nshift,Pred.N,Pred.fam.N), 'obj',[], 'prediction',nan(Nfull,Pred.fam.N), 'dev',nan(1,Pred.fam.N), 'devFrac',nan(1,Pred.fam.N) );
