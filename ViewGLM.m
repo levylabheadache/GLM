@@ -11,11 +11,14 @@ if ~isempty(Opts.rShow)
     leftOpt = {[0.02,0.04], [0.08,0.03], [0.04,0.02]};  % {[vert, horz], [bottom, top], [left, right] }
     rightOpt = {[0.04,0.04], [0.08,0.01], [0.04,0.01]}; 
     xAngle = 25;
-    Nrow = Pred.N+1; Ncol = 8;
+    Nrow = Pred.N+1; 
+    Ncol = 8; 
     spGrid = reshape( 1:Nrow*Ncol, Ncol, Nrow )';
     if ~isempty(Opts.figDir)
-        figPath = sprintf('%s%s_glmFits.pdf', Opts.figDir, Opts.name );
-        if exist(figPath,'file'), delete(figPath); end
+        figPath = sprintf('%s%s', Opts.figDir, Opts.name ); %figPath = sprintf('%s%s_glmFits.pdf', Opts.figDir, Opts.name );
+        if exist(figPath,'file') 
+            delete(figPath); 
+        end
     else
         figPath = '';
     end
@@ -32,7 +35,13 @@ if ~isempty(Opts.rShow)
     for v = 1:Pred.N
         sp(v) = subtightplot(Nrow, Ncol, spGrid(v+1,1:Ncol-1), leftOpt{:});
         plot( T, Pred.data(:,v) ); hold on;
-        ylabel(Pred.name{v}, 'Interpreter','none');
+        
+        if Pred.N == 1
+            ylabel('Vessel', 'Interpreter','none');
+        else
+            ylabel(Pred.name{v}, 'Interpreter','none');
+        end 
+
         xlim([-Inf,Inf]);
         if v < Pred.N
             set(gca,'TickDir','out', 'TickLength',[0.003,0], 'box','off', 'XtickLabel',[]);
@@ -49,8 +58,8 @@ if ~isempty(Opts.rShow)
         plot( T, Resp.data(:,r), 'c' );  % , 'LineWidth',2
         hold on;
         plot( T, Result(r).prediction, 'k', 'LineWidth',1 );
-        %plot( T, Result(r).lopo.prediction );
-        plot( T, Result(r).lofo.prediction );
+        plot( T, Result(r).lopo.prediction );
+        %plot( T, Result(r).lofo.prediction );
         legend(['Data','Full', Summ.lofo.name])
         set(gca,'XtickLabel',[], 'TickDir','out', 'TickLength',[0.003,0]);
         box off;
@@ -79,7 +88,7 @@ if ~isempty(Opts.rShow)
         linkaxes(sp, 'x');
         % compare full-model deviance explained to that of the LOPO and LOFO models
         subtightplot(Nrow, Ncol, spGrid(1,Ncol), rightOpt{:});  % [0.01,0.01], [0.00,0.00], [0.00,0.00]
-        cla;
+        cla; %to clear the axis
         line([0,0], [0, Pred.N+Pred.fam.N+1]+0.5, 'color','k' ); hold on;
         line(Opts.minDev*[1,1], [0, Pred.N+Pred.fam.N+1]+0.5, 'color','r', 'LineStyle','--' );
         plot( [Result(r).dev, Result(r).lopo.dev, Result(r).lofo.dev], 1:Pred.N+Pred.fam.N+1,  '.' );
@@ -87,6 +96,13 @@ if ~isempty(Opts.rShow)
         set(gca, 'Ytick',1:Pred.N+Pred.fam.N+1, 'YtickLabel',['All', Summ.lopo.name, Summ.lofo.name], 'TickLabelInterpreter','none', 'FontSize',10, 'TickDir','out'); % 
         xlim([-0.02, Inf]); ylim([0, Pred.N+Pred.fam.N+1]+0.5); 
         ylabel('Dev Expl');
+
+        % save figure
+%         if ~isempty(figPath)
+%             fprintf('\nSaving %s', figPath);
+%             saveas(GLMresultFig ,figPath);
+%         end
+
         if ~isempty(figPath)
             fprintf('\nSaving %s', figPath);
             export_fig(figPath, '-pdf', '-painters','-q101', '-append', GLMresultFig); 
