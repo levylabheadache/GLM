@@ -99,17 +99,25 @@ if ~isempty(Opts.rShow)
 
         % save figure
 %         if ~isempty(figPath)
-%             fprintf('\nSaving %s', figPath);
-%             saveas(GLMresultFig ,figPath);
+%           nameTemp = extractBefore(summaryString, ':');
+%           name = strcat(nameTemp, '_vessel_', num2str(r));
+%           path = 'D:\2photon\Simone\Simone_Macrophages\GLMs\locoDiam\Figures';
+%           filename = fullfile(path, [name, '.fig']); % Combine path, name, and extension
+%           saveas(GLMresultFig, filename);
 %         end
 
-        if ~isempty(figPath)
-            fprintf('\nSaving %s', figPath);
-            export_fig(figPath, '-pdf', '-painters','-q101', '-append', GLMresultFig); 
-            pause(1);
-        else
-            pause;
-        end
+         if ~isempty(figPath)
+%             fprintf('\nSaving %s', figPath);
+%             export_fig(figPath, '-pdf', '-painters','-q101', '-append', GLMresultFig); 
+%             pause(1);
+         else
+%             nameTemp = extractBefore(summaryString, ':');
+%             name = strcat(nameTemp, '_vessel_', num2str(r));
+%             path = 'D:\2photon\Simone\Simone_Macrophages\GLMs\locoDiam\Figures';
+%             filename = fullfile(path, [name, '.fig']); % Combine path, name, and extension
+%             saveas(GLMresultFig, filename);
+             pause;
+         end
     end
 end
 end
